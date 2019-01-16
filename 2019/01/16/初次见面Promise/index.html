@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>初次见面Promise | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Promise介绍 什么是Promise  Promise 是异步编程的一种解决方案，专门处理回调地狱问题 Promise 是一个构造函数 其中有 resolve(成功回调) 和 reject(失败回调) Promise构造函数的 Prototype属性中有 .then() 和 .catch()     - - - [所有实例都能访问] 实现链式编程 由于 Promise实例是异步操作 调用时会有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初次见面Promise">
+<meta property="og:url" content="https://hichank.github.io/2019/01/16/初次见面Promise/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Promise介绍 什么是Promise  Promise 是异步编程的一种解决方案，专门处理回调地狱问题 Promise 是一个构造函数 其中有 resolve(成功回调) 和 reject(失败回调) Promise构造函数的 Prototype属性中有 .then() 和 .catch()     - - - [所有实例都能访问] 实现链式编程 由于 Promise实例是异步操作 调用时会有">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://hichank.github.io/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png">
+<meta property="og:updated_time" content="2019-01-16T01:21:48.447Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初次见面Promise">
+<meta name="twitter:description" content="Promise介绍 什么是Promise  Promise 是异步编程的一种解决方案，专门处理回调地狱问题 Promise 是一个构造函数 其中有 resolve(成功回调) 和 reject(失败回调) Promise构造函数的 Prototype属性中有 .then() 和 .catch()     - - - [所有实例都能访问] 实现链式编程 由于 Promise实例是异步操作 调用时会有">
+<meta name="twitter:image" content="https://hichank.github.io/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hichank.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-初次见面Promise" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/16/初次见面Promise/" class="article-date">
+  <time datetime="2019-01-16T01:21:28.000Z" itemprop="datePublished">2019-01-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      初次见面Promise
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Promise介绍"><a href="#Promise介绍" class="headerlink" title="Promise介绍"></a>Promise介绍</h3><ul>
+<li><p>什么是Promise</p>
+<ul>
+<li>Promise 是异步编程的一种解决方案，专门处理回调地狱问题</li>
+<li>Promise 是一个构造函数 其中有 <code>resolve(成功回调)</code> 和 <code>reject(失败回调)</code></li>
+<li>Promise构造函数的 Prototype属性中有 <code>.then()</code> 和 <code>.catch()</code>     - - - [<strong>所有实例都能访问</strong>]</li>
+<li>实现链式编程<ul>
+<li>由于 Promise实例是异步操作 调用时会有两种状态</li>
+<li>状态1 : 异步执行成功 内部调用成功回调函数 <code>resolve()</code> 返回结果</li>
+<li>状态2 : 异步执行失败 内部调用失败回调函数 <code>reject()</code> 返回结果</li>
+<li>在创建 Promise实例时调用 <code>.then()</code> 预先为异步操作指定 <code>resolve(成功回调)</code> 和 <code>reject(失败回调)</code> <ul>
+<li><strong>注意</strong> [.then() 必须有成功回调 可以没有失败回调]</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用 Promise</p>
+<ul>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 Promise实例</span></span><br><span class="line">  	<span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="comment">// 函数内部为具体的异步操作</span></span><br><span class="line">   	...</span><br><span class="line">  	&#125;);</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 加载模块 fs</span></span><br><span class="line">  	<span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line">  	<span class="comment">// 封装读取文件的异步操作函数</span></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">getFileByPath</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">       	 fs.readFile(<span class="string">'文件路径'</span>, <span class="string">"utf-8"</span>, (error,data) =&gt; &#123;</span><br><span class="line">                <span class="comment">// 失败回调</span></span><br><span class="line">            	 <span class="keyword">if</span>(error) <span class="keyword">return</span> reject(error)</span><br><span class="line">            	 <span class="comment">// 成功回调</span></span><br><span class="line">                resolve(data)</span><br><span class="line">       	&#125;);</span><br><span class="line">   	&#125;);</span><br><span class="line">       <span class="keyword">return</span> promise;</span><br><span class="line">   &#125;;</span><br><span class="line">  </span><br><span class="line">   <span class="comment">// 调用读取文件函数</span></span><br><span class="line">   <span class="keyword">let</span> reader = getFileByPath(<span class="string">'文件路径'</span>);</span><br><span class="line">   reader.then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(data);</span><br><span class="line">   &#125;, error =&gt; &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(error.message);</span><br><span class="line">   &#125;)</span><br><span class="line">   </span><br><span class="line">  	<span class="comment">// 最终简化</span></span><br><span class="line">   getFileByPath(<span class="string">'文件路径'</span>)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">   	&#125;, error =&gt; &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(error);</span><br><span class="line">   	&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行步骤示意图</p>
+</li>
+<li><p><img src="/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png" alt="image-20190115153216620"></p>
+</li>
+</ul>
+</li>
+<li><p>使用 Promise解决回调地狱</p>
+<ul>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加载模块 fs</span></span><br><span class="line">  	<span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line">  	<span class="comment">// 封装读取文件的异步操作函数</span></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">getFileByPath</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">       	 fs.readFile(<span class="string">'文件路径'</span>, <span class="string">"utf-8"</span>, (error,data) =&gt; &#123;</span><br><span class="line">                <span class="comment">// 失败回调</span></span><br><span class="line">            	 <span class="keyword">if</span>(error) <span class="keyword">return</span> reject(error)</span><br><span class="line">            	 <span class="comment">// 成功回调</span></span><br><span class="line">                resolve(data)</span><br><span class="line">       	&#125;);</span><br><span class="line">   	&#125;);</span><br><span class="line">       <span class="keyword">return</span> promise;</span><br><span class="line">   &#125;;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 读取多文件回调</span></span><br><span class="line">  	<span class="comment">// 为了避免 Promise执行失败 须指定失败回调</span></span><br><span class="line">  	getFileByPath(<span class="string">"文件1路径"</span>)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件2路径"</span>);</span><br><span class="line">   	&#125;, error =&gt; &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(error.message);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件2路径"</span>);</span><br><span class="line">   	&#125;)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件3路径"</span>);</span><br><span class="line">   	&#125;, error =&gt; &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(error.message);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件3路径"</span>);</span><br><span class="line">   	&#125;)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> ...</span><br><span class="line">   	&#125;, error =&gt; &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(error.message);</span><br><span class="line">       	<span class="keyword">return</span> ...</span><br><span class="line">   	&#125;)</span><br><span class="line">       ...</span><br><span class="line">       </span><br><span class="line">       <span class="built_in">console</span>.log(<span class="string">"读取完毕!"</span>)</span><br><span class="line">       </span><br><span class="line">   <span class="comment">// 在上一个 .then中返回新的 Promise实例继续使用 .then处理</span></span><br><span class="line">   <span class="comment">// 通过链式编程的方式解决了回调地狱</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>捕获异常的方式</p>
+<ul>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加载模块 fs</span></span><br><span class="line">  	<span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line">  	<span class="comment">// 封装读取文件的异步操作函数</span></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">getFileByPath</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">       	 fs.readFile(<span class="string">'文件路径'</span>, <span class="string">"utf-8"</span>, (error,data) =&gt; &#123;</span><br><span class="line">                <span class="comment">// 失败回调</span></span><br><span class="line">            	 <span class="keyword">if</span>(error) <span class="keyword">return</span> reject(error)</span><br><span class="line">            	 <span class="comment">// 成功回调</span></span><br><span class="line">                resolve(data)</span><br><span class="line">       	&#125;);</span><br><span class="line">   	&#125;);</span><br><span class="line">       <span class="keyword">return</span> promise;</span><br><span class="line">   &#125;;</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 读取多文件回调</span></span><br><span class="line">  	<span class="comment">// 如果后续 Promise执行依赖于前面的 Promise执行结果 则不指定失败回调</span></span><br><span class="line">  	<span class="comment">// 使用 .catch()方法 捕获其中任何 Promise执行失败的异常</span></span><br><span class="line">  	getFileByPath(<span class="string">"文件1路径"</span>)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件2路径"</span>);</span><br><span class="line">   	&#125;)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> getFileByPath(<span class="string">"文件3路径"</span>);</span><br><span class="line">   	&#125;)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">       	<span class="keyword">return</span> ...</span><br><span class="line">   	&#125;)</span><br><span class="line">       .catch(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">      		<span class="built_in">console</span>.log(error.message);</span><br><span class="line">       &#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://hichank.github.io/2019/01/16/初次见面Promise/" data-id="cjqyi456p00015ysc35fcbfyy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/01/16/React配置webpack 属于自己的脚手架/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">React配置webpack 属于自己的脚手架</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/01/16/初次见面Promise/">初次见面Promise</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/16/React配置webpack 属于自己的脚手架/">React配置webpack 属于自己的脚手架</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/16/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
