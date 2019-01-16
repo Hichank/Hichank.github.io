@@ -14,12 +14,10 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Promise介绍 什么是Promise  Promise 是异步编程的一种解决方案，专门处理回调地狱问题 Promise 是一个构造函数 其中有 resolve(成功回调) 和 reject(失败回调) Promise构造函数的 Prototype属性中有 .then() 和 .catch()     - - - [所有实例都能访问] 实现链式编程 由于 Promise实例是异步操作 调用时会有">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://hichank.github.io/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png">
-<meta property="og:updated_time" content="2019-01-16T01:21:48.447Z">
+<meta property="og:updated_time" content="2019-01-16T01:25:37.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初次见面Promise">
 <meta name="twitter:description" content="Promise介绍 什么是Promise  Promise 是异步编程的一种解决方案，专门处理回调地狱问题 Promise 是一个构造函数 其中有 resolve(成功回调) 和 reject(失败回调) Promise构造函数的 Prototype属性中有 .then() 和 .catch()     - - - [所有实例都能访问] 实现链式编程 由于 Promise实例是异步操作 调用时会有">
-<meta name="twitter:image" content="https://hichank.github.io/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -99,7 +97,7 @@
 <li>状态1 : 异步执行成功 内部调用成功回调函数 <code>resolve()</code> 返回结果</li>
 <li>状态2 : 异步执行失败 内部调用失败回调函数 <code>reject()</code> 返回结果</li>
 <li>在创建 Promise实例时调用 <code>.then()</code> 预先为异步操作指定 <code>resolve(成功回调)</code> 和 <code>reject(失败回调)</code> <ul>
-<li><strong>注意</strong> [.then() 必须有成功回调 可以没有失败回调]</li>
+<li><strong>注意</strong>  [ .then( ) 必须有成功回调 可以没有失败回调 ]</li>
 </ul>
 </li>
 </ul>
@@ -109,10 +107,6 @@
 <li><p>使用 Promise</p>
 <ul>
 <li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 Promise实例</span></span><br><span class="line">  	<span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   	<span class="comment">// 函数内部为具体的异步操作</span></span><br><span class="line">   	...</span><br><span class="line">  	&#125;);</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 加载模块 fs</span></span><br><span class="line">  	<span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>);</span><br><span class="line">  	<span class="comment">// 封装读取文件的异步操作函数</span></span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">getFileByPath</span>(<span class="params">path</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">       	 fs.readFile(<span class="string">'文件路径'</span>, <span class="string">"utf-8"</span>, (error,data) =&gt; &#123;</span><br><span class="line">                <span class="comment">// 失败回调</span></span><br><span class="line">            	 <span class="keyword">if</span>(error) <span class="keyword">return</span> reject(error)</span><br><span class="line">            	 <span class="comment">// 成功回调</span></span><br><span class="line">                resolve(data)</span><br><span class="line">       	&#125;);</span><br><span class="line">   	&#125;);</span><br><span class="line">       <span class="keyword">return</span> promise;</span><br><span class="line">   &#125;;</span><br><span class="line">  </span><br><span class="line">   <span class="comment">// 调用读取文件函数</span></span><br><span class="line">   <span class="keyword">let</span> reader = getFileByPath(<span class="string">'文件路径'</span>);</span><br><span class="line">   reader.then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(data);</span><br><span class="line">   &#125;, error =&gt; &#123;</span><br><span class="line">       <span class="built_in">console</span>.log(error.message);</span><br><span class="line">   &#125;)</span><br><span class="line">   </span><br><span class="line">  	<span class="comment">// 最终简化</span></span><br><span class="line">   getFileByPath(<span class="string">'文件路径'</span>)</span><br><span class="line">       .then(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(data);</span><br><span class="line">   	&#125;, error =&gt; &#123;</span><br><span class="line">       	<span class="built_in">console</span>.log(error);</span><br><span class="line">   	&#125;);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>执行步骤示意图</p>
-</li>
-<li><p><img src="/Users/luohaichang/Library/Application%20Support/typora-user-images/image-20190115153216620.png" alt="image-20190115153216620"></p>
 </li>
 </ul>
 </li>
@@ -132,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://hichank.github.io/2019/01/16/初次见面Promise/" data-id="cjqyi456p00015ysc35fcbfyy" class="article-share-link">Share</a>
+      <a data-url="https://hichank.github.io/2019/01/16/初次见面Promise/" data-id="cjqyi4ix000016yscbsmyxvye" class="article-share-link">Share</a>
       
       
     </footer>
