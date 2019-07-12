@@ -285,6 +285,259 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/12/JavaScript高级/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hichank Luo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hichank Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/12/JavaScript高级/" class="post-title-link" itemprop="url">JavaScript高级</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-12 00:54:16 / Modified: 17:56:43" itemprop="dateCreated datePublished" datetime="2019-07-12T00:54:16+08:00">2019-07-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><ul>
+<li>简单类型<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>undefined</li>
+<li>null</li>
+</ul>
+</li>
+<li>复杂类型<ul>
+<li>Array</li>
+<li>Function</li>
+<li>Object</li>
+<li>Date</li>
+<li>Math</li>
+<li>String</li>
+<li>Number</li>
+<li>Boolean</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据类型检测"><a href="#数据类型检测" class="headerlink" title="数据类型检测"></a>数据类型检测</h4><ul>
+<li><p>typeof</p>
+<ul>
+<li><p>基本数据类型检测（除了null）</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="number">123</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="string">'hello'</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="literal">true</span>));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> fn);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>instanceof</p>
+<ul>
+<li><p>检测数组不是很严谨</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br><span class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>);</span><br><span class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Object</span>);</span><br><span class="line"><span class="comment">// 打印结果都为true</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>isArray</p>
+<ul>
+<li><p>专门检测数组类型</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.isArray(arr));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Object.prototype.toString.call</p>
+<ul>
+<li><p>万能检测数据类型</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="literal">null</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="number">123</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="string">'hello'</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]));</span><br><span class="line"><span class="comment">// 打印结果都为字符串</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>isNaN</p>
+<ul>
+<li><p>判断是否为非数字（会有隐式类型转换）</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">isNaN</span>(<span class="string">'123'</span>));</span><br><span class="line"><span class="comment">// 打印结果为false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="基本包装类型"><a href="#基本包装类型" class="headerlink" title="基本包装类型"></a>基本包装类型</h4><ul>
+<li><p>Number</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var num = 123;</span></span><br><span class="line"><span class="comment">// 等同于如下声明</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="number">123</span>);</span><br><span class="line"><span class="built_in">console</span>.log(num.toString());</span><br><span class="line"><span class="built_in">console</span>.log(num.valueOf()); <span class="comment">// valueOf可以得到对象的原始值</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>String</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var str = 'hello';</span></span><br><span class="line"><span class="comment">// 等同于如下声明</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">'hello'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str.toString());</span><br><span class="line"><span class="built_in">console</span>.log(str.valueOf());</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="值类型"><a href="#值类型" class="headerlink" title="值类型"></a>值类型</h3><ul>
+<li><p>数据直接储存在栈中</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = num1;</span><br><span class="line">num2 = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>值类型作为函数参数</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">    num = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> num1 = <span class="number">10</span>;</span><br><span class="line">test(num1);</span><br><span class="line"><span class="built_in">console</span>.log(num1); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><ul>
+<li><p>数据储存在堆中</p>
+</li>
+<li><p>地址存在栈中</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = arr1;</span><br><span class="line">arr2[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(arr1[<span class="number">0</span>]); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>引用类型作为函数参数</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    arr[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>];</span><br><span class="line">test(arr1);</span><br><span class="line"><span class="built_in">console</span>.log(arr1[<span class="number">0</span>]); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="相等和全等"><a href="#相等和全等" class="headerlink" title="相等和全等"></a>相等和全等</h3><ul>
+<li><p>允许类型转换</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="string">'123'</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1 == num2); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> == <span class="number">1</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> == <span class="literal">null</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> == <span class="literal">NaN</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="全等与不全等"><a href="#全等与不全等" class="headerlink" title="全等与不全等"></a>全等与不全等</h3><ul>
+<li><p>严格数据类型匹配</p>
+</li>
+<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="string">'123'</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1 === num2); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> === <span class="number">1</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> === <span class="literal">null</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> === <span class="literal">NaN</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="面试题目"><a href="#面试题目" class="headerlink" title="面试题目"></a>面试题目</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([] == ![]); <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 分析:</span></span><br><span class="line"><span class="comment">// [] == ![];</span></span><br><span class="line"><span class="built_in">console</span>.log(![]); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// [] == false;</span></span><br><span class="line"><span class="built_in">console</span>.log([].valueOf()); <span class="comment">// []</span></span><br><span class="line"><span class="built_in">console</span>.log([].toString()); <span class="comment">// " " 为false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(&#123;&#125; == !&#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 分析:</span></span><br><span class="line"><span class="comment">// &#123;&#125; == !&#123;&#125;;</span></span><br><span class="line"><span class="built_in">console</span>.log(!&#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// &#123;&#125; == false;</span></span><br><span class="line"><span class="built_in">console</span>.log(&#123;&#125;.valueOf()); <span class="comment">// &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(&#123;&#125;.toString()); <span class="comment">// '[object Object]' 为true</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意:<br>如果一个复杂数据类型和一个基本数据类型参与运算<br>先调用复杂数据类型的 valueOf()方法得到原始值<br>如果原始值不能参与运算 再调用 toString()方法参与运算</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/12/Webpack/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -616,271 +869,6 @@
 <p>Adds a banner to the top of each generated chunk.</p>
 </blockquote>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> CopyWebpackPlugin = <span class="built_in">require</span>(<span class="string">'copy-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'production'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-eval-source-map'</span>,</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        <span class="comment">// path需要绝对路径</span></span><br><span class="line">        <span class="comment">// path: path.join(__dirname, './dist/'),</span></span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        <span class="comment">// 输出文件名</span></span><br><span class="line">        filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">        <span class="comment">// 输出路径</span></span><br><span class="line">        <span class="comment">// publicPath: '/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 监视模式</span></span><br><span class="line">    <span class="comment">// watch: true,</span></span><br><span class="line">    <span class="comment">// webpack-dev-sever配置</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        <span class="comment">// contentBase: path.join(__dirname, "public"), // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要</span></span><br><span class="line">        open: <span class="literal">true</span>, <span class="comment">// When open is enabled, the dev server will open the browser.</span></span><br><span class="line">        hot: <span class="literal">true</span>, <span class="comment">// 启用 webpack 的模块热替换特性</span></span><br><span class="line">        compress: <span class="literal">true</span>, <span class="comment">// 一切服务都启用gzip 压缩</span></span><br><span class="line">        port: <span class="number">5000</span> <span class="comment">// 指定要监听请求的端口号</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> CopyWebpackPlugin([</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 拷贝源(推荐使用绝对路径)</span></span><br><span class="line">                <span class="keyword">from</span>: path.join(__dirname, <span class="string">'assets'</span>),</span><br><span class="line">                <span class="comment">// 输出路径(推荐相对路径)</span></span><br><span class="line">                to: <span class="string">'assets'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]),</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'Author: Hichank'</span>)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/02/07/JavaScript高级/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hichank Luo">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hichank Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2019/02/07/JavaScript高级/" class="post-title-link" itemprop="url">Untitled</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-02-07 17:34:34" itemprop="dateCreated datePublished" datetime="2019-02-07T17:34:34+08:00">2019-02-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-07-12 14:04:46" itemprop="dateModified" datetime="2019-07-12T14:04:46+08:00">2019-07-12</time>
-              
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="JavaScript高级"><a href="#JavaScript高级" class="headerlink" title="JavaScript高级"></a>JavaScript高级</h2><h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><ul>
-<li>简单类型<ul>
-<li>string</li>
-<li>number</li>
-<li>boolean</li>
-<li>undefined</li>
-<li>null</li>
-</ul>
-</li>
-<li>复杂类型<ul>
-<li>Array</li>
-<li>Function</li>
-<li>Object</li>
-<li>Date</li>
-<li>Math</li>
-<li>String</li>
-<li>Number</li>
-<li>Boolean</li>
-</ul>
-</li>
-</ul>
-<h4 id="数据类型检测"><a href="#数据类型检测" class="headerlink" title="数据类型检测"></a>数据类型检测</h4><ul>
-<li><p>typeof</p>
-<ul>
-<li><p>基本数据类型检测（除了null）</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="number">123</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="string">'hello'</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span>(<span class="literal">true</span>));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'hello world'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> fn);</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>instanceof</p>
-<ul>
-<li><p>检测数组不是很严谨</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br><span class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Array</span>);</span><br><span class="line"><span class="built_in">console</span>.log(arr <span class="keyword">instanceof</span> <span class="built_in">Object</span>);</span><br><span class="line"><span class="comment">// 打印结果都为true</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>isArray</p>
-<ul>
-<li><p>专门检测数组类型</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Array</span>.isArray(arr));</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>Object.prototype.toString.call</p>
-<ul>
-<li><p>万能检测数据类型</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="literal">null</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="number">123</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call(<span class="string">'hello'</span>));</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.toString.call([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]));</span><br><span class="line"><span class="comment">// 打印结果都为字符串</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>isNaN</p>
-<ul>
-<li><p>判断是否为非数字（会有隐式类型转换）</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="built_in">isNaN</span>(<span class="string">'123'</span>));</span><br><span class="line"><span class="comment">// 打印结果为false</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="基本包装类型"><a href="#基本包装类型" class="headerlink" title="基本包装类型"></a>基本包装类型</h4><ul>
-<li><p>Number</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var num = 123;</span></span><br><span class="line"><span class="comment">// 等同于如下声明</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="keyword">new</span> <span class="built_in">Number</span>(<span class="number">123</span>);</span><br><span class="line"><span class="built_in">console</span>.log(num.toString());</span><br><span class="line"><span class="built_in">console</span>.log(num.valueOf()); <span class="comment">// valueOf可以得到对象的原始值</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>String</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var str = 'hello';</span></span><br><span class="line"><span class="comment">// 等同于如下声明</span></span><br><span class="line"><span class="keyword">var</span> str = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">'hello'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(str.toString());</span><br><span class="line"><span class="built_in">console</span>.log(str.valueOf());</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="值类型"><a href="#值类型" class="headerlink" title="值类型"></a>值类型</h3><ul>
-<li><p>数据直接储存在栈中</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = num1;</span><br><span class="line">num2 = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>值类型作为函数参数</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">num</span>) </span>&#123;</span><br><span class="line">    num = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> num1 = <span class="number">10</span>;</span><br><span class="line">test(num1);</span><br><span class="line"><span class="built_in">console</span>.log(num1); <span class="comment">// 10</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h3><ul>
-<li><p>数据储存在堆中</p>
-</li>
-<li><p>地址存在栈中</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = arr1;</span><br><span class="line">arr2[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(arr1[<span class="number">0</span>]); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>引用类型作为函数参数</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    arr[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>];</span><br><span class="line">test(arr1);</span><br><span class="line"><span class="built_in">console</span>.log(arr1[<span class="number">0</span>]); <span class="comment">// 100</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="相等和全等"><a href="#相等和全等" class="headerlink" title="相等和全等"></a>相等和全等</h3><ul>
-<li><p>允许类型转换</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="string">'123'</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1 == num2); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> == <span class="number">1</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> == <span class="literal">null</span>); <span class="comment">// true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> == <span class="literal">NaN</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="全等与不全等"><a href="#全等与不全等" class="headerlink" title="全等与不全等"></a>全等与不全等</h3><ul>
-<li><p>严格数据类型匹配</p>
-</li>
-<li><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num1 = <span class="string">'123'</span>;</span><br><span class="line"><span class="keyword">var</span> num2 = <span class="number">123</span>;</span><br><span class="line"><span class="built_in">console</span>.log(num1 === num2); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">true</span> === <span class="number">1</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">undefined</span> === <span class="literal">null</span>); <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="literal">NaN</span> === <span class="literal">NaN</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="面试题目"><a href="#面试题目" class="headerlink" title="面试题目"></a>面试题目</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log([] == ![]); <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 分析:</span></span><br><span class="line"><span class="comment">// [] == ![];</span></span><br><span class="line"><span class="built_in">console</span>.log(![]); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// [] == false;</span></span><br><span class="line"><span class="built_in">console</span>.log([].valueOf()); <span class="comment">// []</span></span><br><span class="line"><span class="built_in">console</span>.log([].toString()); <span class="comment">// " " 为false</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(&#123;&#125; == !&#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// 分析:</span></span><br><span class="line"><span class="comment">// &#123;&#125; == !&#123;&#125;;</span></span><br><span class="line"><span class="built_in">console</span>.log(!&#123;&#125;); <span class="comment">// false</span></span><br><span class="line"><span class="comment">// &#123;&#125; == false;</span></span><br><span class="line"><span class="built_in">console</span>.log(&#123;&#125;.valueOf()); <span class="comment">// &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(&#123;&#125;.toString()); <span class="comment">// '[object Object]' 为true</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意:<br>如果一个复杂数据类型和一个基本数据类型参与运算<br>先调用复杂数据类型的 valueOf()方法得到原始值<br>如果原始值不能参与运算 再调用 toString()方法参与运算</p>
-</blockquote>
 
           
         
