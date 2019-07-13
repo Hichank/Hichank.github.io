@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=6.7.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.7.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.7.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.7.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.7.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="webpack高级配置 HTML中img标签的图片资源处理 安装 1npm i html-withimg-loader -S  在 webpack.config.js 文件中进行配置 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack高级">
+<meta property="og:url" content="https://hichank.github.io/2019/07/13/Webpack高级/index.html">
+<meta property="og:site_name" content="Hichank Blog">
+<meta property="og:description" content="webpack高级配置 HTML中img标签的图片资源处理 安装 1npm i html-withimg-loader -S  在 webpack.config.js 文件中进行配置 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-13T12:46:46.898Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack高级">
+<meta name="twitter:description" content="webpack高级配置 HTML中img标签的图片资源处理 安装 1npm i html-withimg-loader -S  在 webpack.config.js 文件中进行配置 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585">
+
+
+
+
+
+
+  <link rel="canonical" href="https://hichank.github.io/2019/07/13/Webpack高级/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Webpack高级 | Hichank Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hichank Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Home</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archives</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/13/Webpack高级/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hichank Luo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hichank Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Webpack高级
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-13 13:54:04 / Modified: 20:46:46" itemprop="dateCreated datePublished" datetime="2019-07-13T13:54:04+08:00">2019-07-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="webpack高级配置"><a href="#webpack高级配置" class="headerlink" title="webpack高级配置"></a>webpack高级配置</h3><hr>
+<h4 id="HTML中img标签的图片资源处理"><a href="#HTML中img标签的图片资源处理" class="headerlink" title="HTML中img标签的图片资源处理"></a>HTML中img标签的图片资源处理</h4><ol>
+<li><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i html-withimg-loader -S</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 <code>webpack.config.js</code> 文件中进行配置</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> CopyWebpackPlugin = <span class="built_in">require</span>(<span class="string">'copy-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'production'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-eval-source-map'</span>,</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        <span class="comment">// path需要绝对路径</span></span><br><span class="line">        <span class="comment">// path: path.join(__dirname, './dist/'),</span></span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        <span class="comment">// 输出文件名</span></span><br><span class="line">        filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">        <span class="comment">// 输出路径</span></span><br><span class="line">        <span class="comment">// publicPath: '/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 监视模式</span></span><br><span class="line">    <span class="comment">// watch: true,</span></span><br><span class="line">    <span class="comment">// webpack-dev-sever配置</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        <span class="comment">// contentBase: path.join(__dirname, "public"), // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要</span></span><br><span class="line">        open: <span class="literal">true</span>, <span class="comment">// When open is enabled, the dev server will open the browser.</span></span><br><span class="line">        hot: <span class="literal">true</span>, <span class="comment">// 启用 webpack 的模块热替换特性</span></span><br><span class="line">        compress: <span class="literal">true</span>, <span class="comment">// 一切服务都启用gzip 压缩</span></span><br><span class="line">        port: <span class="number">5000</span> <span class="comment">// 指定要监听请求的端口号</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> CopyWebpackPlugin([</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 拷贝源(推荐使用绝对路径)</span></span><br><span class="line">                <span class="keyword">from</span>: path.join(__dirname, <span class="string">'assets'</span>),</span><br><span class="line">                <span class="comment">// 输出路径(推荐相对路径)</span></span><br><span class="line">                to: <span class="string">'assets'</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]),</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'Author: Hichank'</span>)</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// 模块</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        <span class="comment">// 配置解析</span></span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 正则匹配文件后缀</span></span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                <span class="comment">// webpack读取loader时是从右到左读取</span></span><br><span class="line">                <span class="comment">// loader的执行顺序是从右到左以管道的方式链式调用</span></span><br><span class="line">                <span class="comment">// css-loader: 解析css文件</span></span><br><span class="line">                <span class="comment">// style-loader: 将解析结果输出到html</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.less$/</span>,</span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'less-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.s(a|c)ss$/</span>,</span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|jpeg|bmp|gif)$/</span>,</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                    options: &#123;</span><br><span class="line">                        <span class="comment">// limit表示图片大于5KB以路径形式展示,小于则以base64格式展示</span></span><br><span class="line">                        limit: <span class="number">5</span> * <span class="number">1024</span>,</span><br><span class="line">                        <span class="comment">// outputPath为输出目录</span></span><br><span class="line">                        outputPath: <span class="string">'images'</span>,</span><br><span class="line">                        <span class="comment">// 自定义名</span></span><br><span class="line">                        name: <span class="string">'[name]-[hash:5].[ext]'</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(woff|woff2|eot|svg|ttf)$/</span>,</span><br><span class="line">                use: [<span class="string">'file-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'babel-loader'</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="comment">// 排除目录</span></span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(htm|html)$/i</span>,</span><br><span class="line">                loader: <span class="string">'html-withimg-loader'</span></span><br><span class="line">            &#125;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用时, 只需将在html中正常引入图片即可, webpack会自动将对应的资源进行打包并修改引用路径</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="多页面应用打包"><a href="#多页面应用打包" class="headerlink" title="多页面应用打包"></a>多页面应用打包</h4><hr>
+<p>MPA (MultiPage Application) 的webpack打包配置也是必须要掌握的</p>
+<blockquote>
+<p>优点： </p>
+<ol>
+<li><p>数据可以直接渲染，对于搜索引擎（SEO）友好</p>
+</li>
+<li><p>BootStrap 对移动端和PC端界面展示都很友好</p>
+</li>
+<li><p>后期维护方便，成本低，易上手</p>
+</li>
+</ol>
+</blockquote>
+<ol>
+<li><p>在 <code>webpack.config.js</code> 中修改入口和出口配置 (在其他配置保留不变的情况下)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 修改为多入口</span></span><br><span class="line">    entry: &#123;</span><br><span class="line">      index: <span class="string">'./src/index.js'</span>,</span><br><span class="line">      other: <span class="string">'./src/other.js'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 多入口无法对应一个固定出口 所以需修改filename为[name]变量 (webpack提供)</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        filename: <span class="string">'[name].js'</span>,</span><br><span class="line">        publicPath: <span class="string">'/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">      	<span class="comment">// 如果用了html插件, 需手动配置多入口对应的html文件, 将指定其对应的输出文件</span></span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span>,</span><br><span class="line">          	chunks: [<span class="string">'index'</span>]</span><br><span class="line">        &#125;)</span><br><span class="line">      	<span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'other.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/other.html'</span>,</span><br><span class="line">          	chunks: [<span class="string">'other'</span>]</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="第三方库的两种引入方式"><a href="#第三方库的两种引入方式" class="headerlink" title="第三方库的两种引入方式"></a>第三方库的两种引入方式</h4><p>可以通过 <code>expose-loader</code> 进行全局变量的注入, 同时也可以使用内置插件 <code>webpack.ProvidePlugin</code> 对每个模块的闭包空间注入变量, 自动加载模块, 而不必到处 <code>import</code> 或 <code>require</code></p>
+<ul>
+<li><p>expose-loader <strong><em>将库引用到全局作用域</em></strong></p>
+<ol>
+<li><p>安装 (例: juqery)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i expose-loader -D</span><br><span class="line">npm i jquery -S</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在 <code>webpack.config.js</code> 中配置loader</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 模块</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        <span class="comment">// 配置解析</span></span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="built_in">require</span>.resolve(<span class="string">'jquery'</span>),</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'expose-loader'</span>,</span><br><span class="line">                    options: <span class="string">"$"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>require.resolve</code> 用来获取模块的绝对路径</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>webpack.ProvidePlugin <strong><em>将库引用到所有模块</em></strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">            <span class="string">"$"</span>: jquery,</span><br><span class="line">            <span class="string">"jQuery"</span>: jquery</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>ProvidePlugin插件是webpack是内置的</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="Development-Production不同配置文件打包"><a href="#Development-Production不同配置文件打包" class="headerlink" title="Development / Production不同配置文件打包"></a>Development / Production不同配置文件打包</h4><hr>
+<p>项目开发时一般需要用到两套配置文件, 用于<strong><em>开发阶段打包</em></strong>  (不压缩代码, 不优化代码, 增加开发效率) 和<strong><em>上线阶段打包</em></strong>  (压缩代码, 优化代码, 打包后直接上线使用)。</p>
+<p>抽取三个配置文件</p>
+<ul>
+<li>webpack.config.js</li>
+<li>webpack.prod.js</li>
+<li>webpack.dev.js</li>
+</ul>
+<p>步骤如下</p>
+<ol>
+<li><p>将开发环境和生产环境公用配置放入 <code>webpack.config.js</code> 中, 不同的配置各自放入 <code>webpack.prod.js</code> 或 <code>webpack.dev.js</code> 中 (例 : mode)</p>
+</li>
+<li><p>在  <code>webpack.prod.js</code> 或 <code>webpack.dev.js</code> 中使用 <code>webpack-merge</code> 将各自配置与公用配置合并后导出</p>
+<blockquote>
+<p>安装 <code>npm i webpack-merge -D</code></p>
+</blockquote>
+</li>
+<li><p>将 <code>package.json</code> 中的脚本参数进行修改, 通过 <code>--config</code> 手动指定特定的配置文件</p>
+</li>
+</ol>
+<p>代码展示</p>
+<ul>
+<li><p><code>webpack.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">    CleanWebpackPlugin</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> CopyWebpackPlugin = <span class="built_in">require</span>(<span class="string">'copy-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        <span class="comment">// path需要绝对路径</span></span><br><span class="line">        <span class="comment">// path: path.join(__dirname, './dist/'),</span></span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        <span class="comment">// 输出文件名</span></span><br><span class="line">        filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">        <span class="comment">// 输出路径</span></span><br><span class="line">        <span class="comment">// publicPath: '/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">        <span class="keyword">new</span> CopyWebpackPlugin([&#123;</span><br><span class="line">            <span class="comment">// 拷贝源(推荐使用绝对路径)</span></span><br><span class="line">            <span class="keyword">from</span>: path.join(__dirname, <span class="string">'assets'</span>),</span><br><span class="line">            <span class="comment">// 输出路径(推荐相对路径)</span></span><br><span class="line">            to: <span class="string">'assets'</span></span><br><span class="line">        &#125;]),</span><br><span class="line">        <span class="keyword">new</span> webpack.BannerPlugin(<span class="string">'Author: Hichank'</span>),</span><br><span class="line">        <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">            $: <span class="string">'jquery'</span>,</span><br><span class="line">            jQuery: <span class="string">'jquery'</span></span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// 模块</span></span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        <span class="comment">// 配置解析</span></span><br><span class="line">        rules: [&#123;</span><br><span class="line">                <span class="comment">// 正则匹配文件后缀</span></span><br><span class="line">                test: <span class="regexp">/\.css$/</span>,</span><br><span class="line">                <span class="comment">// webpack读取loader时是从右到左读取</span></span><br><span class="line">                <span class="comment">// loader的执行顺序是从右到左以管道的方式链式调用</span></span><br><span class="line">                <span class="comment">// css-loader: 解析css文件</span></span><br><span class="line">                <span class="comment">// style-loader: 将解析结果输出到html</span></span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.less$/</span>,</span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'less-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.s(a|c)ss$/</span>,</span><br><span class="line">                use: [<span class="string">'style-loader'</span>, <span class="string">'css-loader'</span>, <span class="string">'sass-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(png|jpg|jpeg|bmp|gif)$/</span>,</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'url-loader'</span>,</span><br><span class="line">                    options: &#123;</span><br><span class="line">                        <span class="comment">// limit表示图片大于5KB以路径形式展示,小于则以base64格式展示</span></span><br><span class="line">                        limit: <span class="number">5</span> * <span class="number">1024</span>,</span><br><span class="line">                        <span class="comment">// outputPath为输出目录</span></span><br><span class="line">                        outputPath: <span class="string">'images'</span>,</span><br><span class="line">                        <span class="comment">// 自定义名</span></span><br><span class="line">                        name: <span class="string">'[name]-[hash:5].[ext]'</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(woff|woff2|eot|svg|ttf)$/</span>,</span><br><span class="line">                use: [<span class="string">'file-loader'</span>]</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'babel-loader'</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="comment">// 排除目录</span></span><br><span class="line">                exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(htm|html)$/i</span>,</span><br><span class="line">                loader: <span class="string">'html-withimg-loader'</span></span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="built_in">require</span>.resolve(<span class="string">'jquery'</span>),</span><br><span class="line">                use: &#123;</span><br><span class="line">                    loader: <span class="string">'expose-loader'</span>,</span><br><span class="line">                    options: <span class="string">"$"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 监视模式</span></span><br><span class="line">    <span class="comment">// watch: true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>webpack.prod.js</code> </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> baseConfig = <span class="built_in">require</span>(<span class="string">'./webpack.config'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(baseConfig, &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'production'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-source-map'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>webpack.dev.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> baseConfig = <span class="built_in">require</span>(<span class="string">'./webpack.config'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(baseConfig, &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'development'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// webpack-dev-sever配置</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        <span class="comment">// contentBase: path.join(__dirname, "public"), // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要</span></span><br><span class="line">        open: <span class="literal">true</span>, <span class="comment">// When open is enabled, the dev server will open the browser.</span></span><br><span class="line">        hot: <span class="literal">true</span>, <span class="comment">// 启用 webpack 的模块热替换特性</span></span><br><span class="line">        compress: <span class="literal">true</span>, <span class="comment">// 一切服务都启用gzip 压缩</span></span><br><span class="line">        port: <span class="number">5000</span> <span class="comment">// 指定要监听请求的端口号</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-eval-source-map'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>package.json</code></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"test"</span>: <span class="string">"echo \"Error: no test specified\" &amp;&amp; exit 1"</span>,</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"webpack-dev-server --config webpack.dev.js"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack --config webpack.prod.js"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="定义环境变量"><a href="#定义环境变量" class="headerlink" title="定义环境变量"></a>定义环境变量</h4><hr>
+<p>除了区分不同的配置文件进行打包, 或许你还需要在开发时知道当前的环境是开发阶段还是上线阶段, 所以可以借助内置插件 <code>DefinePlugin</code> 来定义环境变量。最终实现开发阶段和上线阶段的代码自切换</p>
+<h5 id="代码演示-—-webpack-dev-js"><a href="#代码演示-—-webpack-dev-js" class="headerlink" title="代码演示 — webpack.dev.js"></a>代码演示 — webpack.dev.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> baseConfig = <span class="built_in">require</span>(<span class="string">'./webpack.config'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(baseConfig, &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'development'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// webpack-dev-sever配置</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        <span class="comment">// contentBase: path.join(__dirname, "public"), // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要</span></span><br><span class="line">        open: <span class="literal">true</span>, <span class="comment">// When open is enabled, the dev server will open the browser.</span></span><br><span class="line">        hot: <span class="literal">true</span>, <span class="comment">// 启用 webpack 的模块热替换特性</span></span><br><span class="line">        compress: <span class="literal">true</span>, <span class="comment">// 一切服务都启用gzip 压缩</span></span><br><span class="line">        port: <span class="number">5000</span>, <span class="comment">// 指定要监听请求的端口号</span></span><br><span class="line">        <span class="comment">// 代理</span></span><br><span class="line">        proxy: &#123;</span><br><span class="line">            <span class="string">"/api"</span>: &#123;</span><br><span class="line">                target: <span class="string">"http://localhost:3000"</span>, <span class="comment">// 代理地址</span></span><br><span class="line">                pathRewrite: &#123; <span class="string">"^/api"</span>: <span class="string">""</span> &#125; <span class="comment">// 重新定义接口详细地址</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">            NODE_ENV: <span class="built_in">JSON</span>.stringify(<span class="string">'DEV'</span>),</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-eval-source-map'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="proxy代理"><a href="#proxy代理" class="headerlink" title="proxy代理"></a>proxy代理</h4><hr>
+<p>开发阶段往往会遇上 <strong><em>跨域</em></strong> 的问题, 但在上线后前端代码会和后端代码整合部署在 <strong><em>同一服务器</em></strong> 下, 并不会出现跨域的问题, 但是由于开发时用到 <code>webpack-dev-server</code> 所以一定会产生跨域的问题</p>
+<p>目前跨域的主要解决方案有 :</p>
+<ol>
+<li>jsonp (淘汰)</li>
+<li>CORS</li>
+<li>http proxy</li>
+</ol>
+<blockquote>
+<p>此处介绍的使用devServer解决跨域 原理是http proxy</p>
+</blockquote>
+<p>将所有 ajax请求发送给devServer服务器, 再通过devServer服务器转发到数据接口服务器</p>
+<p>因为跨域问题的起因是[浏览器的同源策略][<a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy]" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy]</a>, 由于ajax请求是发送给devServer服务器, 所以不存在跨域</p>
+<h5 id="代码演示-—-webpack-dev-js-1"><a href="#代码演示-—-webpack-dev-js-1" class="headerlink" title="代码演示 — webpack.dev.js"></a>代码演示 — webpack.dev.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> merge = <span class="built_in">require</span>(<span class="string">'webpack-merge'</span>)</span><br><span class="line"><span class="keyword">const</span> baseConfig = <span class="built_in">require</span>(<span class="string">'./webpack.config'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = merge(baseConfig, &#123;</span><br><span class="line">    <span class="comment">// 模式</span></span><br><span class="line">    mode: <span class="string">'development'</span>, <span class="comment">// 默认为production, 可设置成development(区别: 是否进行压缩混淆)</span></span><br><span class="line">    <span class="comment">// webpack-dev-sever配置</span></span><br><span class="line">    devServer: &#123;</span><br><span class="line">        <span class="comment">// contentBase: path.join(__dirname, "public"), // 告诉服务器从哪里提供内容。只有在你想要提供静态文件时才需要</span></span><br><span class="line">        open: <span class="literal">true</span>, <span class="comment">// When open is enabled, the dev server will open the browser.</span></span><br><span class="line">        hot: <span class="literal">true</span>, <span class="comment">// 启用 webpack 的模块热替换特性</span></span><br><span class="line">        compress: <span class="literal">true</span>, <span class="comment">// 一切服务都启用gzip 压缩</span></span><br><span class="line">        port: <span class="number">5000</span>, <span class="comment">// 指定要监听请求的端口号</span></span><br><span class="line">        <span class="comment">// 代理</span></span><br><span class="line">        proxy: &#123;</span><br><span class="line">            <span class="string">"/api"</span>: &#123;</span><br><span class="line">                target: <span class="string">"http://localhost:3000"</span>, <span class="comment">// 代理地址</span></span><br><span class="line">                pathRewrite: &#123; <span class="string">"^/api"</span>: <span class="string">""</span> &#125; <span class="comment">// 重新定义接口详细地址</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DefinePlugin(&#123;</span><br><span class="line">            NODE_ENV: <span class="built_in">JSON</span>.stringify(<span class="string">'DEV'</span>),</span><br><span class="line">        &#125;)</span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">// Using source maps</span></span><br><span class="line">    devtool: <span class="string">'cheap-module-eval-source-map'</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h4 id="HMR的使用"><a href="#HMR的使用" class="headerlink" title="HMR的使用"></a>HMR的使用</h4><hr>
+<p>需要对某个模块进行热更新时, 可以通过 <code>module.hot.accept</code> 方法进行文件监视</p>
+<p>只要模块内容发生变化, 就会触发回调函数, 从而重新读取模块内容做相应操作</p>
+<h5 id="代码演示-—-index-js"><a href="#代码演示-—-index-js" class="headerlink" title="代码演示 — index.js"></a>代码演示 — index.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">"Hello Webpack!"</span>)</span><br><span class="line"><span class="keyword">import</span> str <span class="keyword">from</span> <span class="string">'./houmodule'</span></span><br><span class="line"><span class="built_in">console</span>.log(str)</span><br><span class="line"><span class="built_in">module</span>.hot.accept(<span class="string">'./houmodule.js'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// import语法只能在全局作用域最顶层 这里我们可以是用require</span></span><br><span class="line">    <span class="keyword">var</span> hotmodule = <span class="built_in">require</span>(<span class="string">'./houmodule'</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(hotmodule)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h5 id="代码演示-—-houmodule-js"><a href="#代码演示-—-houmodule-js" class="headerlink" title="代码演示 — houmodule.js"></a>代码演示 — houmodule.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">"hello world!"</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/12/Webpack/" rel="next" title="Webpack入门">
+                <i class="fa fa-chevron-left"></i> Webpack入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hichank Luo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack高级配置"><span class="nav-number">1.</span> <span class="nav-text">webpack高级配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML中img标签的图片资源处理"><span class="nav-number">1.1.</span> <span class="nav-text">HTML中img标签的图片资源处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多页面应用打包"><span class="nav-number">1.2.</span> <span class="nav-text">多页面应用打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方库的两种引入方式"><span class="nav-number">1.3.</span> <span class="nav-text">第三方库的两种引入方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Development-Production不同配置文件打包"><span class="nav-number">1.4.</span> <span class="nav-text">Development / Production不同配置文件打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义环境变量"><span class="nav-number">1.5.</span> <span class="nav-text">定义环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#代码演示-—-webpack-dev-js"><span class="nav-number">1.5.1.</span> <span class="nav-text">代码演示 — webpack.dev.js</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy代理"><span class="nav-number">1.6.</span> <span class="nav-text">proxy代理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#代码演示-—-webpack-dev-js-1"><span class="nav-number">1.6.1.</span> <span class="nav-text">代码演示 — webpack.dev.js</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HMR的使用"><span class="nav-number">1.7.</span> <span class="nav-text">HMR的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#代码演示-—-index-js"><span class="nav-number">1.7.1.</span> <span class="nav-text">代码演示 — index.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码演示-—-houmodule-js"><span class="nav-number">1.7.2.</span> <span class="nav-text">代码演示 — houmodule.js</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hichank Luo</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v6.7.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.7.0"></script>
+
+  <script src="/js/src/motion.js?v=6.7.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.7.0"></script>
+<script src="/js/src/post-details.js?v=6.7.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.7.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
