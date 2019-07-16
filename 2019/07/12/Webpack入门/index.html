@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="Hichank Blog">
 <meta property="og:description" content="webpack的安装 注意: 安装webpack前请保证nodejs是最新版环境   全局安装webpack  1npm i webpack webpack-cli -g  项目中安装webpack (推荐)  1npm i webpack webpack-cli -D  webpack的使用webpack-cli npm 5.2以上版本中提供了npx 命令  npx解决的主要问题是调用项目内部安">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-13T12:49:19.940Z">
+<meta property="og:updated_time" content="2019-07-16T10:10:20.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Webpack入门">
 <meta name="twitter:description" content="webpack的安装 注意: 安装webpack前请保证nodejs是最新版环境   全局安装webpack  1npm i webpack webpack-cli -g  项目中安装webpack (推荐)  1npm i webpack webpack-cli -D  webpack的使用webpack-cli npm 5.2以上版本中提供了npx 命令  npx解决的主要问题是调用项目内部安">
@@ -348,7 +348,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-13 20:49:19" itemprop="dateModified" datetime="2019-07-13T20:49:19+08:00">2019-07-13</time>
+                <time title="Modified: 2019-07-16 18:10:20" itemprop="dateModified" datetime="2019-07-16T18:10:20+08:00">2019-07-16</time>
               
             
           </span>
@@ -596,7 +596,7 @@
 <ol>
 <li><strong>使用 cheap模式可以大幅提高 source map 生成的效率。</strong>大部分情况我们调试并不关心列信息, 而且就算 source map没有列, 有些浏览器引擎 (例如 v8) 也会给出列信息。</li>
 <li><strong>使用 module 可支持 babel 这种预编译工具映射转换前的代码</strong> </li>
-<li><strong>使用 eval 方式可大幅提高持续构建效率。</strong>官方文档提供的速度对比表格可以看到 eval 模式的重新构建速度是很快的 [详细请看 [webpack官网][<a href="https://webpack.js.org/configuration/devtool/]]" target="_blank" rel="noopener">https://webpack.js.org/configuration/devtool/]]</a></li>
+<li><strong>使用 eval 方式可大幅提高持续构建效率。</strong>官方文档提供的速度对比表格可以看到 eval 模式的重新构建速度是很快的 - 详细请看 <a href="https://webpack.js.org/configuration/devtool/" target="_blank" rel="noopener">webpack官网</a></li>
 <li><strong>使用 eval-source-map 模式可以减少网络请求。</strong>这种模式开启 DataUrl 本身包含完整的 source map信息, 并不需要像 sourceURL 那样, 浏览器需要发送完整请求去获取 source map 文件, 这会略微提高效率。而生产环境中则不宜用 eval, 这样会让文件变得极大。</li>
 </ol>
 </li>

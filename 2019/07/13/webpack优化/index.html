@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="Hichank Blog">
 <meta property="og:description" content="webpack优化配置 production模式打包自带的优化  tree shaking   tree shaking 是一个术语, 通常用于打包时移除 JavaScript 中未引用的代码 (dead-code), 它依赖于 ES6模块系统中的 import 和 export 静态结构特性。  开发时引入一个模块后, 如果只使用其中一个功能, 上线打包时只会把用到的功能打包进文件, 其他没用到">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-16T08:26:11.393Z">
+<meta property="og:updated_time" content="2019-07-16T16:42:40.952Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack优化">
 <meta name="twitter:description" content="webpack优化配置 production模式打包自带的优化  tree shaking   tree shaking 是一个术语, 通常用于打包时移除 JavaScript 中未引用的代码 (dead-code), 它依赖于 ES6模块系统中的 import 和 export 静态结构特性。  开发时引入一个模块后, 如果只使用其中一个功能, 上线打包时只会把用到的功能打包进文件, 其他没用到">
@@ -348,7 +348,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-16 16:26:11" itemprop="dateModified" datetime="2019-07-16T16:26:11+08:00">2019-07-16</time>
+                <time title="Modified: 2019-07-17 00:42:40" itemprop="dateModified" datetime="2019-07-17T00:42:40+08:00">2019-07-17</time>
               
             
           </span>
@@ -426,7 +426,7 @@
 </ol>
 <h4 id="css前缀自处理"><a href="#css前缀自处理" class="headerlink" title="css前缀自处理"></a>css前缀自处理</h4><hr>
 <blockquote>
-<p>项目中常常需要配置市场上各大浏览器兼容的css前缀 [webpack官网][<a href="https://webpack.js.org/loaders/postcss-loader/]" target="_blank" rel="noopener">https://webpack.js.org/loaders/postcss-loader/]</a> 中推荐 <code>postcss-loader</code></p>
+<p>项目中常常需要配置市场上各大浏览器兼容的css前缀 <a href="https://webpack.js.org/loaders/postcss-loader/" target="_blank" rel="noopener">webpack官网</a> 中推荐 <code>postcss-loader</code></p>
 </blockquote>
 <p><strong>使用 <code>postcss</code> 需要用到 <code>postcss-loader</code> 和 <code>autoprefixer</code> 插件</strong></p>
 <ol>
@@ -542,7 +542,120 @@
 </li>
 </ol>
 <h4 id="DellPlugin"><a href="#DellPlugin" class="headerlink" title="DellPlugin"></a>DellPlugin</h4><hr>
-<p>未完…</p>
+<p>在引用一些第三方模块时, 例如vue/react/angular等框架, 这些框架的文件一般都是不会修改的, 而每次打包都需要去解析它们, 也影响打包速度, 哪怕做拆分, 也只是提高了上线后用户访问速度, 并不会提高构建速度, 所以如果需要提高构建速度, 应该使用动态链接库的方式, 类似于 Windows的 dll 文件</p>
+<p>借助 DllPlugin插件实现将这些框架作为一个个的动态链接库, 只构建一次, 以后每次构建都只生成自己的业务逻辑代码, 可以大大提高构建效率!</p>
+<p>其主要的原理在于, 将一些不做修改的依赖文件, 提前打包, 这样我们开发代码发布的时候就不需要再对这部分代码重新进行打包, 从而节省了打包时间</p>
+<p>涉及两个插件: </p>
+<ol>
+<li><p>DllPlugin</p>
+<blockquote>
+<p>使用一个单独webpack配置创建一个dll文件。并且它还创建一个 <code>manifest.json</code> 文件, DllReferencePlugin使用该 json文件来做映射依赖性 (这个文件会告诉我们哪些文件是已经提前打包好的)</p>
+</blockquote>
+<p>配置参数 :</p>
+<ul>
+<li>context (可选) : manifest文件中请求的上下文, 默认为该webpack文件上下文</li>
+<li>name : 公开的 dll函数的名称, 和 output.library保持一致即可</li>
+<li>path : <code>manifest.json</code> 生成的文件夹及名字</li>
+</ul>
+</li>
+<li><p>DllReferencePlugin</p>
+<blockquote>
+<p>这个插件用于 webpack配置, 它引用的 dll需要预先构建的依赖关系</p>
+</blockquote>
+<ul>
+<li>Context : manifest文件中请求的上下文</li>
+<li>manifest : DllPlugin插件生成的 <code>manifest.json</code></li>
+<li>content (可选) : 请求的映射模块id (默认为 <code>manifest.content</code>)</li>
+<li>name (可选) : dll暴露的名字</li>
+<li>scope (可选) : 前缀用于访问dll内容</li>
+<li>sourceType (可选) : dll是如何暴露 (libraryTarget)</li>
+</ul>
+</li>
+</ol>
+<h4 id="将Vue项目中的库抽取成Dll"><a href="#将Vue项目中的库抽取成Dll" class="headerlink" title="将Vue项目中的库抽取成Dll"></a>将Vue项目中的库抽取成Dll</h4><hr>
+<ol>
+<li><p>准备将Vue打包成DLL的 webpack配置文件, 创建 <code>webpack.vue.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    mode: <span class="string">'development'</span>,</span><br><span class="line">    entry: &#123;</span><br><span class="line">        vue: [</span><br><span class="line">            <span class="string">'vue/dist/vue.js'</span>,</span><br><span class="line">            <span class="string">'vue-router'</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'dist'</span>),</span><br><span class="line">        filename: <span class="string">'[name]_dll.js'</span>,</span><br><span class="line">        library: <span class="string">'[name]_dll'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">            name: <span class="string">'[name]_dll.js'</span>,</span><br><span class="line">            path: path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'dist/manifest.json'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装插件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i add-asset-html-webpack-plugin -D</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置插件自动添加 script标签到 HTML中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> AddAssetHtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'add-asset-html-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">        publicPath: <span class="string">'/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">            filepath: path.resolve(__dirname,<span class="string">'..'</span>,<span class="string">'dist/vue_dll.js'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="将React项目中的库抽取成Dll"><a href="#将React项目中的库抽取成Dll" class="headerlink" title="将React项目中的库抽取成Dll"></a>将React项目中的库抽取成Dll</h4><hr>
+<ol>
+<li><p>准备将React打包成DLL的 webpack配置文件, 创建 <code>webpack.react.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    mode: <span class="string">'development'</span>,</span><br><span class="line">    entry: &#123;</span><br><span class="line">        vue: [</span><br><span class="line">            <span class="string">'react'</span>,</span><br><span class="line">            <span class="string">'react-dom'</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'dist'</span>),</span><br><span class="line">        filename: <span class="string">'[name]_dll.js'</span>,</span><br><span class="line">        library: <span class="string">'[name]_dll'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">            name: <span class="string">'[name]_dll.js'</span>,</span><br><span class="line">            path: path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'dist/manifest.json'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装插件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i add-asset-html-webpack-plugin -D</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置插件自动添加 script标签到 HTML中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</span><br><span class="line"><span class="keyword">const</span> AddAssetHtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">'add-asset-html-webpack-plugin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        filename: <span class="string">'bundle.js'</span>,</span><br><span class="line">        publicPath: <span class="string">'/'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 插件</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">            filename: <span class="string">'index.html'</span>,</span><br><span class="line">            template: <span class="string">'./public/index.html'</span></span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="keyword">new</span> AddAssetHtmlWebpackPlugin(&#123;</span><br><span class="line">            filepath: path.resolve(__dirname,<span class="string">'..'</span>,<span class="string">'dist/react_dll.js'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Happypack"><a href="#Happypack" class="headerlink" title="Happypack"></a>Happypack</h4><hr>
+<p>由于 webpack是在node环境中运行打包构建, 所以是单线程模式, 在打包众多资源时效率会很低, 早期可以通过 <code>Happypack</code> 来实现多进程打包, 当然, 随着 webpack的版本不断的升级改进, 现在的webpack已经非常强劲了, 所以无需使用 <code>Happypack</code> 也可以实现高性能的打包</p>
+<blockquote>
+<p><strong>Maintenance mode notice</strong></p>
+<p>My interest in the project is fading away mainly because I’m not using JavaScript as much as I was in the past. Additionally, Webpack’s native performance is improving and (I hope) it will soon make this plugin unnecessary.</p>
+<p>See the FAQ entry about Webpack 4 and <a href="https://github.com/webpack-contrib/thread-loader" target="_blank" rel="noopener">thread-loader</a>.</p>
+<p>Contributions are always welcome. Changes I make from this point will be restricted to bug-fixing. If someone wants to take over, feel free to get in touch.</p>
+<p>Thanks to everyone who used the library, contributed to it and helped in refining it!!!</p>
+</blockquote>
+<h4 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h4><hr>
+<p>在做了众多代码分离的优化后, 其目的是为了利用浏览器缓存, 达到提高访问速度的效果, 所以构建项目时做代码分隔是必要的, 例如将固定的第三方模块抽离, 下次修改了业务代码, 重新发布上线不重启服务器, 用户再次访问服务器就不需要再次加载第三方模块</p>
+<blockquote>
+<p>而这也给我们带来了一个新的问题, 如果再次打包上线不重启服务器, 客户端会将以前的业务代码和第三方模块同时缓存, 再次访问时依旧访问缓存中的业务代码, 所以会导致业务代码无法及时更新</p>
+</blockquote>
+<p>此时需要在 output节点的 filename中使用 placeholder语法, 根据代码内容生成文件名的hash : </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack的配置文件</span></span><br><span class="line"><span class="comment">// CommonJS规范</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// 入口</span></span><br><span class="line">    entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">    <span class="comment">// 输出</span></span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.resolve(<span class="string">'./dist/'</span>),</span><br><span class="line">        filename: <span class="string">'[name].[contenthash:8].bundle.js'</span>,</span><br><span class="line">        publicPath: <span class="string">'/'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>之后每次打包业务代码时, 如果有改变, 会生成新的 hash作为文件名, 浏览器就不会使用缓存, 而第三方模块不会重新打包生成新的名字, 则会继续使用缓存, 从而解决了这个问题</p>
+</blockquote>
+<h4 id="打包分析"><a href="#打包分析" class="headerlink" title="打包分析"></a>打包分析</h4><hr>
+<p>项目构建完成后, 需要通过一些工具对打包后的bundle进行分析, 通过分析才能总结出一些经验, 官方推荐的分析方法是这样的 : </p>
+<ol>
+<li><p>使用 <code>--profile --json</code> 参数, 以 json格式来输出打包后的结果到某个指定文件中</p>
+<blockquote>
+<p>在 <code>package.json</code> 中重新设置 scripts</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"webpack --profile --json &gt; stats.json --config ./build/webpack.prod.js"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将指定文件放入工具中进行分析</p>
+<ul>
+<li><p>官方工具 : <a href="https://github.com/webpack/analyse" target="_blank" rel="noopener">official analyze tool</a></p>
+</li>
+<li><p>官方推荐工具 : </p>
+<ul>
+<li><a href="https://alexkuz.github.io/webpack-chart/" target="_blank" rel="noopener">webpack-chart</a>: Interactive pie chart for webpack stats.</li>
+<li><a href="https://chrisbateman.github.io/webpack-visualizer/" target="_blank" rel="noopener">webpack-visualizer</a>: Visualize and analyze your bundles to see which modules are taking up space and which might be duplicates.</li>
+<li><a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener">webpack-bundle-analyzer</a>: A plugin and CLI utility that represents bundle content as a convenient interactive zoomable treemap.</li>
+<li><a href="https://webpack.jakoblind.no/optimize" target="_blank" rel="noopener">webpack bundle optimize helper</a>: This tool will analyze your bundle and give you actionable suggestions on what to improve to reduce your bundle size.</li>
+<li><a href="https://github.com/bundle-stats/bundle-stats" target="_blank" rel="noopener">bundle-stats</a>: Generate a bundle report(bundle size, assets, modules) and compare the results between different builds.</li>
+</ul>
+<blockquote>
+<p>其中 <code>webpack-bundle-analyzer</code> 是插件, 需要以插件的方式安装到项目中</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="Prefetching和Preloading"><a href="#Prefetching和Preloading" class="headerlink" title="Prefetching和Preloading"></a>Prefetching和Preloading</h4><hr>
+<p>在优化访问性能时, 除了充分利用浏览器缓存之外, 还需要涉及一个性能指标 : coverage rate (覆盖率)</p>
+<blockquote>
+<p>可以在 chrome浏览器的控制台中按 : <code>Ctrl + shift + p</code> 查找 <code>show coverage</code> 打开覆盖率面板</p>
+</blockquote>
+<p>点击开始录制后刷新网页, 即可看到每个 <code>.js</code> 文件的覆盖率, 以及总的覆盖率</p>
+<ul>
+<li><p>想提高覆盖率, 我们需要尽可能多的使用动态导入, 也就是懒加载功能, 将一切能使用懒加载的地方都使用懒加载, 这样可以大幅提高覆盖率</p>
+</li>
+<li><p>但有时候使用懒加载会影响用户体验, 所以可以在动态导入时使用魔法注释 <code>Prefetching</code> , 是指在首页资源加载完毕后, 将动态导入的资源默默加载进来, 这样既可以提高首屏加载速度, 也可以解决懒加载可能带来的用户体验差的问题</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getComponent</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">import</span>(<span class="comment">/* webpackPrefetch: true */</span><span class="string">'jquery'</span>).then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: $ &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> $(<span class="string">'&lt;div&gt;&lt;/div&gt;'</span>).html(<span class="string">'动态导入'</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
     </div>
@@ -691,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack优化配置"><span class="nav-number">1.</span> <span class="nav-text">webpack优化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#production模式打包自带的优化"><span class="nav-number">1.1.</span> <span class="nav-text">production模式打包自带的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css优化"><span class="nav-number">1.2.</span> <span class="nav-text">css优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css前缀自处理"><span class="nav-number">1.3.</span> <span class="nav-text">css前缀自处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启css压缩"><span class="nav-number">1.4.</span> <span class="nav-text">开启css压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#js优化"><span class="nav-number">1.5.</span> <span class="nav-text">js优化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#手动配置多入口"><span class="nav-number">1.5.1.</span> <span class="nav-text">手动配置多入口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#抽取公共代码"><span class="nav-number">1.5.2.</span> <span class="nav-text">抽取公共代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#动态导入"><span class="nav-number">1.5.3.</span> <span class="nav-text">动态导入</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提高构建性能"><span class="nav-number">1.6.</span> <span class="nav-text">提高构建性能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#noParse"><span class="nav-number">1.6.1.</span> <span class="nav-text">noParse</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lgnorePlugin"><span class="nav-number">1.7.</span> <span class="nav-text">lgnorePlugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DellPlugin"><span class="nav-number">1.8.</span> <span class="nav-text">DellPlugin</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack优化配置"><span class="nav-number">1.</span> <span class="nav-text">webpack优化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#production模式打包自带的优化"><span class="nav-number">1.1.</span> <span class="nav-text">production模式打包自带的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css优化"><span class="nav-number">1.2.</span> <span class="nav-text">css优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#css前缀自处理"><span class="nav-number">1.3.</span> <span class="nav-text">css前缀自处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启css压缩"><span class="nav-number">1.4.</span> <span class="nav-text">开启css压缩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#js优化"><span class="nav-number">1.5.</span> <span class="nav-text">js优化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#手动配置多入口"><span class="nav-number">1.5.1.</span> <span class="nav-text">手动配置多入口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#抽取公共代码"><span class="nav-number">1.5.2.</span> <span class="nav-text">抽取公共代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#动态导入"><span class="nav-number">1.5.3.</span> <span class="nav-text">动态导入</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提高构建性能"><span class="nav-number">1.6.</span> <span class="nav-text">提高构建性能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#noParse"><span class="nav-number">1.6.1.</span> <span class="nav-text">noParse</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lgnorePlugin"><span class="nav-number">1.7.</span> <span class="nav-text">lgnorePlugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DellPlugin"><span class="nav-number">1.8.</span> <span class="nav-text">DellPlugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将Vue项目中的库抽取成Dll"><span class="nav-number">1.9.</span> <span class="nav-text">将Vue项目中的库抽取成Dll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将React项目中的库抽取成Dll"><span class="nav-number">1.10.</span> <span class="nav-text">将React项目中的库抽取成Dll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Happypack"><span class="nav-number">1.11.</span> <span class="nav-text">Happypack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器缓存"><span class="nav-number">1.12.</span> <span class="nav-text">浏览器缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#打包分析"><span class="nav-number">1.13.</span> <span class="nav-text">打包分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prefetching和Preloading"><span class="nav-number">1.14.</span> <span class="nav-text">Prefetching和Preloading</span></a></li></ol></li></ol></div>
             
 
           </div>
