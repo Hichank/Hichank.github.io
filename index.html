@@ -285,6 +285,435 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/21/浏览器的回流与重绘/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hichank Luo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hichank Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/21/浏览器的回流与重绘/" class="post-title-link" itemprop="url">浏览器的回流与重绘</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-21 16:00:00" itemprop="dateCreated datePublished" datetime="2019-07-21T16:00:00+08:00">2019-07-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-24 16:19:36" itemprop="dateModified" datetime="2019-07-24T16:19:36+08:00">2019-07-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="回流与重绘-Reflow-amp-Repaint"><a href="#回流与重绘-Reflow-amp-Repaint" class="headerlink" title="回流与重绘(Reflow &amp; Repaint)"></a>回流与重绘(Reflow &amp; Repaint)</h3><hr>
+<p>在讨论回流与重绘之前, 我们要先知道如下几点:</p>
+<ol>
+<li>浏览器使用流式布局模型(Flow Based Layout)</li>
+<li>浏览器会把 <code>HTML</code> 解析成 <code>DOM</code> , 把 <code>CSS</code> 解析成 <code>CSSOM</code> , <code>DOM</code> 和 <code>CSSOM</code> 合并就产生了 <code>RenderTree</code></li>
+<li><code>RenderTree</code> 中包含了所有节点的样式, 然后计算他们在页面上的大小和位置, 最后把节点绘制到页面上</li>
+<li>由于浏览器使用流式布局, 对 <code>RenderTree</code> 的计算通常只需要遍历一次就可以完成, 但 <code>table</code> 以及内部元素除外, 他们可能需要多次计算, 也就是说需要等同于其他元素要多花几倍的时间, 这也就是为什么要避免使用 <code>table</code> 布局的原因之一</li>
+</ol>
+<blockquote>
+<p>一句话: 回流必将引起重绘, 重绘不一定会引起回流</p>
+</blockquote>
+<h4 id="回流-Reflow"><a href="#回流-Reflow" class="headerlink" title="回流 (Reflow)"></a>回流 (Reflow)</h4><hr>
+<p>当 <code>RenderTree</code> 中部分或者全部元素的尺寸/结构/属性发生改变时, 浏览器重新渲染部分或者全部文档的过程叫做回流</p>
+<h5 id="导致回流的操作"><a href="#导致回流的操作" class="headerlink" title="导致回流的操作:"></a>导致回流的操作:</h5><ul>
+<li>页面首次渲染</li>
+<li>浏览器窗口大小发生改变</li>
+<li>元素尺寸或者位置发生改变</li>
+<li>元素内容的变化 (文字数量或者图片大小等等)</li>
+<li>元素字体大小变化</li>
+<li>添加或者删除<strong>可见</strong>的 <code>DOM</code> 元素</li>
+<li>激活 <code>CSS</code> 伪类 (例如: <code>:hover</code>)</li>
+<li>查询某些属性或者调用某些方法</li>
+</ul>
+<h5 id="一些常用并且会导致回流的属性和方法"><a href="#一些常用并且会导致回流的属性和方法" class="headerlink" title="一些常用并且会导致回流的属性和方法:"></a>一些常用并且会导致回流的属性和方法:</h5><ul>
+<li><code>clientWidth</code>、<code>clientHeight</code>、<code>clientTop</code>、<code>clientLeft</code></li>
+<li><code>offsetWidth</code>、<code>offsetHeight</code>、<code>offsetTop</code>、<code>offsetLeft</code></li>
+<li><code>scrollWidth</code>、<code>scrollHeight</code>、<code>scrollTop</code>、<code>scrollLeft</code></li>
+<li><code>scrollIntoView()</code>、<code>scrollIntoViewIfNeeded()</code></li>
+<li><code>getComputedStyle()</code></li>
+<li><code>getBoundingClientRect()</code></li>
+<li><code>scrollTo()</code></li>
+</ul>
+<h4 id="重绘-Repaint"><a href="#重绘-Repaint" class="headerlink" title="重绘 (Repaint)"></a>重绘 (Repaint)</h4><hr>
+<p>当页面中元素样式的改变并不影响它在文档流中的位置时（例如：<code>color</code>、<code>background-color</code>、<code>visibility</code>等），浏览器会将新样式赋予给元素并重新绘制它，这个过程称为重绘。</p>
+<h4 id="性能影响"><a href="#性能影响" class="headerlink" title="性能影响"></a>性能影响</h4><hr>
+<blockquote>
+<p>回流比重绘的代价要更高。</p>
+</blockquote>
+<p>有时即使仅仅回流一个单一的元素，它的父元素以及任何跟随它的元素也会产生回流。<br>现代浏览器会对频繁的回流或重绘操作进行优化：</p>
+<p>浏览器会维护一个队列，把所有引起回流和重绘的操作放入队列中，如果队列中的任务数量或者时间间隔达到一个阈值的，浏览器就会将队列清空，进行一次批处理，这样可以把多次回流和重绘变成一次。</p>
+<p>当你访问以下属性或方法时，浏览器会立刻清空队列：</p>
+<ul>
+<li><p><code>clientWidth</code>、<code>clientHeight</code>、<code>clientTop</code>、<code>clientLeft</code></p>
+</li>
+<li><p><code>offsetWidth</code>、<code>offsetHeight</code>、<code>offsetTop</code>、<code>offsetLeft</code></p>
+</li>
+<li><p><code>scrollWidth</code>、<code>scrollHeight</code>、<code>scrollTop</code>、<code>scrollLeft</code></p>
+</li>
+<li><p><code>width</code>、<code>height</code></p>
+</li>
+<li><p><code>getComputedStyle()</code></p>
+</li>
+<li><p><code>getBoundingClientRect()</code></p>
+</li>
+</ul>
+<p>因为队列中可能会有影响到这些属性或方法返回值的操作，即使你希望获取的信息与队列中操作引发的改变无关，浏览器也会强行清空队列，确保你拿到的值是最精确的。</p>
+<h4 id="如何避免"><a href="#如何避免" class="headerlink" title="如何避免"></a>如何避免</h4><hr>
+<h5 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h5><ul>
+<li>避免使用 table 布局。</li>
+<li>尽可能在 DOM 树的最末端改变 class。</li>
+<li>避免设置多层内联样式。</li>
+<li>将动画效果应用到 position 属性为 absolute 或 fixed 的元素上。</li>
+<li>避免使用 CSS 表达式（例如：calc()）。</li>
+</ul>
+<h5 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h5><ul>
+<li>避免频繁操作样式，最好一次性重写 style 属性，或者将样式列表定义为 class 并一次性更改 class 属性。</li>
+<li>避免频繁操作 DOM，创建一个 documentFragment，在它上面应用所有 DOM 操作，最后再把它添加到文档中。</li>
+<li>也可以先为元素设置 display: none，操作结束后再把它显示出来。因为在 display 属性为 none 的元素上进行的 DOM 操作不会引发回流和重绘。</li>
+<li>避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来。</li>
+<li>对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续元素频繁回流。</li>
+</ul>
+<blockquote>
+<p><strong><em>作者：腰花</em></strong></p>
+<p><strong>文章来源：<a href="https://juejin.im/post/5a9923e9518825558251c96a" target="_blank" rel="noopener">掘金</a></strong></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/19/cookie介绍/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hichank Luo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hichank Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/07/19/cookie介绍/" class="post-title-link" itemprop="url">cookie介绍</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2019-07-19 14:58:00" itemprop="dateCreated datePublished" datetime="2019-07-19T14:58:00+08:00">2019-07-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-07-24 16:06:07" itemprop="dateModified" datetime="2019-07-24T16:06:07+08:00">2019-07-24</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="什么是-cookie"><a href="#什么是-cookie" class="headerlink" title="什么是 cookie"></a>什么是 cookie</h3><hr>
+<blockquote>
+<p><code>cookie</code> 是存储于访问者计算机中的变量. 每当同一台计算机通过浏览器请求某个页面时, 就会发送 <code>cookie</code> , 你可以使用JavaScript来创建和取回 <code>cookie</code> 的值</p>
+</blockquote>
+<p>在JavaScript中通过 <code>document.cookie</code> 来读取或者设置 <code>cookie</code> , 由于 <code>cookie</code> 多用在客户端和服务端之间进行通信, 所以除了JavaScript以外, 服务端的语言 (例如PHP) 也可以存取 <code>cookie</code></p>
+<h3 id="cookie介绍"><a href="#cookie介绍" class="headerlink" title="cookie介绍"></a>cookie介绍</h3><hr>
+<ol>
+<li><code>cookie</code> 是有大小限制的，每个 <code>cookie</code> 所存放的数据不能超过4kb，如果 <code>cookie</code> 字符串的长度超过4kb，则该属性将返回空字符串。</li>
+<li>由于 <code>cookie</code> 最终都是以文件形式存放在客户端计算机中，查看和修改 <code>cookie</code> 都是很方便，所以 <code>cookie</code> 不能存放重要信息。</li>
+<li>每个 <code>cookie</code> 的格式都是这样的：&lt;名&gt;=&lt;值&gt;；名称和值都必须是合法的标示符。</li>
+<li><code>cookie</code> 是<strong>存在有效期的</strong>。在默认情况下，<code>cookie</code> 的生命周期是会话级别的。如果想要 <code>cookie</code> 能在浏览器关掉之后还可以使用，就必须要为该 <code>cookie</code> 设置有效期，也就是 <code>cookie</code> 的失效日期。</li>
+<li><code>cookie</code> 有域和路径的概念。域就是domain，因为浏览器是个注意安全的环境，所以不同的域之间是不能互相访问 <code>cookie</code> 的(可以通过特殊设置的达到 <code>cookie</code> 跨域访问)。路径就是routing的概念，一个网页所创建的 <code>cookie</code> 只能被与这个网页在同一目录或子目录下得所有网页访问，而不能被其他目录下得网页访问。</li>
+</ol>
+<h3 id="cookie常见的问题"><a href="#cookie常见的问题" class="headerlink" title="cookie常见的问题"></a>cookie常见的问题</h3><hr>
+<ol>
+<li><p><code>cookie</code> 存在两种类型：</p>
+<ul>
+<li>当前浏览网站本身设置的 <code>cookie</code></li>
+<li>第三方网页嵌入的 <code>cookie</code></li>
+</ul>
+</li>
+<li><p><code>cookie</code> 的两种清除方式：</p>
+<ul>
+<li><p>通过浏览器工具清除 <code>cookie</code></p>
+</li>
+<li><p>通过设置 <code>cookie</code> 的有效期来清除</p>
+<blockquote>
+<p>注意：删除 <code>cookie</code> 可能会导致某些网页无法正常运行</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>浏览器可以通过设置来接受或者拒绝访问 <code>cookie</code></p>
+</li>
+</ol>
+<h3 id="cookie基础用法"><a href="#cookie基础用法" class="headerlink" title="cookie基础用法"></a>cookie基础用法</h3><hr>
+<ul>
+<li><p>存取 <code>cookie</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.cookie = <span class="string">'user=Hichank'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>以上代码中 <code>user</code> 表示 <code>cookie</code> 名称, 而 <code>Hichank</code> 表示这个名称对应的值. 如果名称存在则为修改</p>
+</blockquote>
+</li>
+<li><p><code>cookie</code> 的读取</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getCookie</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> cookieObj = &#123;&#125;</span><br><span class="line">    <span class="built_in">document</span>.cookie.split(<span class="string">'; '</span>).forEach(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">        cookieObj[v.split(<span class="string">'='</span>)[<span class="number">0</span>]] = v.split(<span class="string">'='</span>)[<span class="number">1</span>]</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> cookieObj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>未完…</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://hichank.github.io/2019/07/13/webpack优化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1025,7 +1454,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-16 18:10:20" itemprop="dateModified" datetime="2019-07-16T18:10:20+08:00">2019-07-16</time>
+                <time title="Modified: 2019-07-22 15:47:16" itemprop="dateModified" datetime="2019-07-22T15:47:16+08:00">2019-07-22</time>
               
             
           </span>
@@ -1234,7 +1663,7 @@
 <li><p>如果需要支持更高级的ES6语法, 可以继续安装插件</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i @babel/plugin-proposal-class-properties -D</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>详细语法功能插件请到 [babel官网][<a href="https://babeljs.io/docs/en/plugins]" target="_blank" rel="noopener">https://babeljs.io/docs/en/plugins]</a> 查看</p>
+<p>详细语法功能插件请到 <a href="https://babeljs.io/docs/en/plugins" target="_blank" rel="noopener">babel官网</a> 查看</p>
 </blockquote>
 </li>
 <li><p>配置 <code>webpack.config.js</code></p>
@@ -1242,7 +1671,7 @@
 <p>官方更建议的做法是在项目根目录下创建 <code>.babelrc</code> 的babel配置文件</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"presets"</span>: [<span class="string">"@babel/env"</span>],</span><br><span class="line">    <span class="attr">"plugins"</span>: [<span class="string">"@babel/plugin-proposal-class-properties"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>关于使用 <code>generator</code> 无法直接使用babel进行转换, 因为会将 <code>generator</code> 转换为 <code>regeneratorRuntime</code> , 然后使用 <code>wrap</code> 和 <code>mark</code> 来实现 <code>generator</code> [详情请见 [babel官网][<a href="https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav]]" target="_blank" rel="noopener">https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav]]</a></p>
+<li><p>关于使用 <code>generator</code> 无法直接使用babel进行转换, 因为会将 <code>generator</code> 转换为 <code>regeneratorRuntime</code> , 然后使用 <code>wrap</code> 和 <code>mark</code> 来实现 <code>generator</code> [详情请见 <a href="https://babeljs.io/docs/en/babel-plugin-transform-runtime#docsNav" target="_blank" rel="noopener">babel官网</a>]</p>
 <blockquote>
 <p>但由于babel并没有内置 <code>regeneratorRuntime</code> 所以无法直接使用</p>
 </blockquote>
@@ -2137,7 +2566,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2019-07-12 01:07:19" itemprop="dateModified" datetime="2019-07-12T01:07:19+08:00">2019-07-12</time>
+                <time title="Modified: 2019-07-24 16:06:39" itemprop="dateModified" datetime="2019-07-24T16:06:39+08:00">2019-07-24</time>
               
             
           </span>
@@ -2207,6 +2636,7 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 async修饰的函数内部代码为同步执行</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">getWeather</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// await会将后面的 Promise中 then的回调函数结果返回</span></span><br><span class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> axiox.get(<span class="string">"接口地址"</span>);</span><br><span class="line">    <span class="keyword">const</span> result2 = <span class="keyword">await</span> axiox.get(<span class="string">"接口地址2"</span>);</span><br><span class="line">    <span class="keyword">const</span> result3 = <span class="keyword">await</span> axiox.get(<span class="string">"接口地址3"</span>);</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">console</span>.log(result);</span><br><span class="line">    <span class="built_in">console</span>.log(result2);</span><br><span class="line">    <span class="built_in">console</span>.log(result3);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
+<p>未完…</p>
 
           
         
@@ -2577,7 +3007,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
